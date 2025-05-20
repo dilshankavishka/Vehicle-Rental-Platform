@@ -1,0 +1,38 @@
+footer {
+  a {
+    color: #555;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      color: #000;
+    }
+  }
+
+  ul li {
+    margin-bottom: 0.5rem; // ✅ Adds spacing between items
+  }
+
+  h6 {
+    margin-bottom: 1rem;
+  }
+
+  hr {
+    border-top: 1px solid #dee2e6;
+    margin-top: 2rem;
+  }
+  .scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+}
+

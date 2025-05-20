@@ -1,0 +1,27 @@
+.input-group .form-control {
+  border-radius: 2rem;
+}
+
+.input-group-text {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.btn-light {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+// Control the search bar width
+.custom-search-width {
+  width: 100%; // Full on mobile
+
+  @media (min-width: 768px) { // md and up
+    width: 50%; // Medium width on desktop
+  }
+
+  @media (min-width: 992px) { // lg and up
+    width: 40%;
+  }
+}
+
