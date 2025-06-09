@@ -4,7 +4,7 @@
     <div class="row justify-content-between">
       <!-- Logo & Description -->
       <div class="col-12 col-md-3 mb-4">
-        <h5 class="text-primary fw-bold">MORENT</h5>
+        <h5 class="text-primary fw-bold">EasyVehicleRental</h5>
         <p class="small">
           Our vision is to provide convenience<br />
           and help increase your sales business.
@@ -37,13 +37,21 @@
           <div class="col-6 col-md-4 mb-3">
             <h6 class="fw-bold">Socials</h6>
             <ul class="list-unstyled small">
-              <li><i class="bi bi-discord me-2"></i><a href="#">Discord</a></li>
               <li>
-                <i class="bi bi-instagram me-2"></i><a href="#">Instagram</a>
+                <i class="bi bi-discord me-2"></i
+                ><a [routerLink]="'/socials'">Discord</a>
               </li>
-              <li><i class="bi bi-twitter me-2"></i><a href="#">Twitter</a></li>
               <li>
-                <i class="bi bi-facebook me-2"></i><a href="#">Facebook</a>
+                <i class="bi bi-instagram me-2"></i
+                ><a [routerLink]="'/socials'">Instagram</a>
+              </li>
+              <li>
+                <i class="bi bi-twitter me-2"></i
+                ><a [routerLink]="'/socials'">Twitter</a>
+              </li>
+              <li>
+                <i class="bi bi-facebook me-2"></i
+                ><a [routerLink]="'/socials'">Facebook</a>
               </li>
             </ul>
           </div>
@@ -57,8 +65,8 @@
     <div
       class="d-flex flex-column flex-md-row justify-content-between align-items-center py-3 small"
     >
-      <div>©2022 MORENT. All rights reserved</div>
-      <div>
+      <div class="fw-bold">©2025 EasyVehicleRental. All rights reserved</div>
+      <div class="fw-bold">
         <a href="#" class="me-3">Privacy & Policy</a>
         <a href="#">Terms & Condition</a>
       </div>
