@@ -1,0 +1,57 @@
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  background-color: rgba(53, 99, 233, 1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.card {
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: rgba(53, 99, 233, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(53, 99, 233, 0.25);
+}
+
+.btn-primary {
+  background-color: rgba(53, 99, 233, 1);
+  border-color: rgba(53, 99, 233, 1);
+}
+
+.btn-primary:hover {
+  background-color: rgba(42, 79, 186, 1);
+  border-color: rgba(42, 79, 186, 1);
+}
+
+.text-primary {
+  color: rgba(53, 99, 233, 1) !important;
+}
+
+.bg-primary {
+  background-color: rgba(53, 99, 233, 1) !important;
+}
+
+.invalid-feedback {
+  display: block;
+}

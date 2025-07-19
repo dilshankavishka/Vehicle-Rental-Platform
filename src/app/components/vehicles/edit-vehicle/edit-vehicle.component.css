@@ -1,0 +1,58 @@
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.card {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.text-primary {
+  color: rgba(53, 99, 233, 1) !important;
+}
+
+.btn-primary {
+  background-color: rgba(53, 99, 233, 1);
+  border-color: rgba(53, 99, 233, 1);
+}
+
+.btn-primary:hover {
+  background-color: rgba(42, 79, 186, 1);
+  border-color: rgba(42, 79, 186, 1);
+}
+
+.btn-outline-secondary {
+  color: rgba(108, 117, 125, 1);
+  border-color: rgba(108, 117, 125, 1);
+}
+
+.btn-outline-secondary:hover {
+  background-color: rgba(108, 117, 125, 1);
+  border-color: rgba(108, 117, 125, 1);
+}
+
+.image-preview {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+.form-control:focus {
+  border-color: rgba(53, 99, 233, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(53, 99, 233, 0.25);
+}
+
+.form-select:focus {
+  border-color: rgba(53, 99, 233, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(53, 99, 233, 0.25);
+}

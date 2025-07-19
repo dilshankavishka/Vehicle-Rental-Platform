@@ -1,0 +1,189 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <div class="profile-avatar mx-auto mb-3">
+              {{ getInitials() }}
+            </div>
+            <h3>{{ currentUser?.name }}</h3>
+            <p class="text-muted">{{ currentUser?.email }}</p>
+            <span class="badge bg-primary">{{ currentUser?.role }}</span>
+          </div>
+
+          <!-- Profile Form -->
+          <form (ngSubmit)="updateProfile()" #profileForm="ngForm">
+            <h5 class="mb-3">
+              <i class="bi bi-person me-2"></i>Profile Information
+            </h5>
+
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="profileData.name"
+                  name="name"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email Address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  [(ngModel)]="profileData.email"
+                  name="email"
+                  required
+                  email
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone Number</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  [(ngModel)]="profileData.phone"
+                  name="phone"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Member Since</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="currentUser?.joinDate | date : 'mediumDate'"
+                  readonly
+                />
+              </div>
+            </div>
+
+            <div class="alert alert-success" *ngIf="profileUpdateSuccess">
+              <i class="bi bi-check-circle me-2"></i>
+              Profile updated successfully!
+            </div>
+
+            <div class="alert alert-danger" *ngIf="profileUpdateError">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ profileUpdateError }}
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!profileForm.form.valid || isUpdatingProfile"
+            >
+              <span
+                *ngIf="isUpdatingProfile"
+                class="loading-spinner me-2"
+              ></span>
+              {{ isUpdatingProfile ? "Updating..." : "Update Profile" }}
+            </button>
+          </form>
+
+          <hr class="my-4" />
+
+          <!-- Password Change Form -->
+          <form (ngSubmit)="changePassword()" #passwordForm="ngForm">
+            <h5 class="mb-3"><i class="bi bi-lock me-2"></i>Change Password</h5>
+
+            <div class="row g-3 mb-4">
+              <div class="col-12">
+                <label class="form-label">Current Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  [(ngModel)]="passwordData.oldPassword"
+                  name="oldPassword"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">New Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  [(ngModel)]="passwordData.newPassword"
+                  name="newPassword"
+                  required
+                  minlength="6"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Confirm New Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  [(ngModel)]="passwordData.confirmPassword"
+                  name="confirmPassword"
+                  required
+                  [class.is-invalid]="
+                    passwordData.confirmPassword &&
+                    passwordData.newPassword !== passwordData.confirmPassword
+                  "
+                />
+                <div class="invalid-feedback">Passwords do not match</div>
+              </div>
+            </div>
+
+            <div class="alert alert-success" *ngIf="passwordChangeSuccess">
+              <i class="bi bi-check-circle me-2"></i>
+              Password changed successfully!
+            </div>
+
+            <div class="alert alert-danger" *ngIf="passwordChangeError">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ passwordChangeError }}
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-warning"
+              [disabled]="
+                !passwordForm.form.valid ||
+                passwordData.newPassword !== passwordData.confirmPassword ||
+                isChangingPassword
+              "
+            >
+              <span
+                *ngIf="isChangingPassword"
+                class="loading-spinner me-2"
+              ></span>
+              {{ isChangingPassword ? "Changing..." : "Change Password" }}
+            </button>
+          </form>
+
+          <hr class="my-4" />
+
+          <!-- Delete Account Section -->
+          <div class="card border-danger">
+            <div class="card-body">
+              <h5 class="text-danger mb-3">
+                <i class="bi bi-exclamation-triangle me-2"></i>Danger Zone
+              </h5>
+              <p class="text-muted mb-3">
+                Once you delete your account, there is no going back. Please be
+                certain.
+              </p>
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="deleteAccount()"
+                [disabled]="isDeletingAccount"
+              >
+                <span
+                  *ngIf="isDeletingAccount"
+                  class="loading-spinner me-2"
+                ></span>
+                {{ isDeletingAccount ? "Deleting..." : "Delete My Account" }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

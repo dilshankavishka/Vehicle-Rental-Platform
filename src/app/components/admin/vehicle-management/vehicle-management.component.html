@@ -1,0 +1,96 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Vehicle Management</h2>
+    <span class="text-muted">{{ vehicles.length }} total vehicles</span>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12" *ngFor="let vehicle of vehicles">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <img [src]="vehicle.images[0]" [alt]="vehicle.name" class="img-fluid rounded">
+            </div>
+            <div class="col-md-9">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                  <h5 class="mb-1">{{ vehicle.name }}</h5>
+                  <p class="text-muted mb-0">
+                    <i class="bi bi-geo-alt me-1"></i>{{ vehicle.location }}
+                  </p>
+                  <small class="text-muted">Owner: {{ vehicle.ownerName }}</small>
+                </div>
+                <div class="text-end">
+                  <span class="badge" [ngClass]="vehicle.available ? 'bg-success' : 'bg-danger'">
+                    {{ vehicle.available ? 'Available' : 'Unavailable' }}
+                  </span>
+                  <div class="mt-1">
+                    <small class="text-muted">ID: {{ vehicle.id }}</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-2">
+                  <div class="text-center p-2 bg-light rounded">
+                    <div class="small fw-bold">Type</div>
+                    <div class="small">{{ vehicle.type }}</div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="text-center p-2 bg-light rounded">
+                    <div class="small fw-bold">Year</div>
+                    <div class="small">{{ vehicle.year }}</div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="text-center p-2 bg-light rounded">
+                    <div class="small fw-bold">Price/Day</div>
+                    <div class="small">LKR {{ vehicle.pricePerDay }}</div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="text-center p-2 bg-light rounded">
+                    <div class="small fw-bold">Rating</div>
+                    <div class="small">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      {{ vehicle.rating }} ({{ vehicle.reviewCount }})
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="text-center p-2 bg-light rounded">
+                    <div class="small fw-bold">Listed</div>
+                    <div class="small">{{ vehicle.createdDate | date:'short' }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <p class="text-muted small mb-2">{{ vehicle.description }}</p>
+                <div class="d-flex flex-wrap gap-1">
+                  <span class="badge bg-light text-dark" *ngFor="let feature of vehicle.features.slice(0, 4)">
+                    {{ feature }}
+                  </span>
+                  <span class="badge bg-secondary" *ngIf="vehicle.features.length > 4">
+                    +{{ vehicle.features.length - 4 }} more
+                  </span>
+                </div>
+              </div>
+
+              <div class="d-flex gap-2">
+                <button 
+                  class="btn btn-sm btn-danger"
+                  (click)="deleteVehicle(vehicle.id!)"
+                >
+                  <i class="bi bi-trash me-1"></i>Delete Vehicle
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

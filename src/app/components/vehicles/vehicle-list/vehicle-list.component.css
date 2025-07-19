@@ -1,0 +1,107 @@
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(53, 99, 233, 0.3);
+  border-radius: 50%;
+  border-top-color: rgba(53, 99, 233, 1);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.vehicle-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.vehicle-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-nav-left,
+.image-nav-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.image-nav-left {
+  left: 10px;
+}
+
+.image-nav-right {
+  right: 10px;
+}
+
+.vehicle-card:hover .image-nav-left,
+.vehicle-card:hover .image-nav-right {
+  opacity: 1;
+}
+
+.image-indicators {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.indicator.active {
+  background: white;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.text-primary {
+  color: rgba(53, 99, 233, 1) !important;
+}
+
+.btn-primary {
+  background-color: rgba(53, 99, 233, 1);
+  border-color: rgba(53, 99, 233, 1);
+}
+
+.btn-primary:hover {
+  background-color: rgba(42, 79, 186, 1);
+  border-color: rgba(42, 79, 186, 1);
+}

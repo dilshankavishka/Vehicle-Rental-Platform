@@ -1,0 +1,94 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Booking Management</h2>
+    <div class="d-flex align-items-center gap-3">
+      <select class="form-select" [(ngModel)]="statusFilter" (change)="filterBookings()">
+        <option value="ALL">All Status</option>
+        <option value="PENDING">Pending</option>
+        <option value="CONFIRMED">Confirmed</option>
+        <option value="ACTIVE">Active</option>
+        <option value="COMPLETED">Completed</option>
+        <option value="CANCELLED">Cancelled</option>
+      </select>
+      <span class="text-muted">{{ filteredBookings.length }} bookings</span>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12" *ngFor="let booking of filteredBookings">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3" *ngIf="getVehicle(booking.vehicleId) as vehicle">
+              <img [src]="vehicle.images[0]" [alt]="vehicle.name" class="img-fluid rounded">
+            </div>
+            <div class="col-md-9">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                  <h5 class="mb-1">Booking #{{ booking.id }}</h5>
+                  <p class="text-muted mb-0">{{ getVehicle(booking.vehicleId)?.name }}</p>
+                  <small class="text-muted">User ID: {{ booking.userId }}</small>
+                </div>
+                <div class="text-end">
+                  <span class="badge status-badge" [ngClass]="getStatusBadgeClass(booking.status)">
+                    {{ booking.status }}
+                  </span>
+                  <div class="mt-1">
+                    <small class="text-muted">{{ booking.bookingDate | date:'short' }}</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                  <div class="text-center p-2 bg-light rounded">
+                    <i class="bi bi-calendar-event text-primary"></i>
+                    <div class="small fw-bold">Start Date</div>
+                    <div class="small">{{ booking.startDate | date:'short' }}</div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="text-center p-2 bg-light rounded">
+                    <i class="bi bi-calendar-check text-success"></i>
+                    <div class="small fw-bold">End Date</div>
+                    <div class="small">{{ booking.endDate | date:'short' }}</div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="text-center p-2 bg-light rounded">
+                    <i class="bi bi-currency-dollar text-warning"></i>
+                    <div class="small fw-bold">Amount</div>
+                    <div class="small">LKR {{ booking.totalAmount }}</div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="text-center p-2 bg-light rounded">
+                    <i class="bi bi-clock text-info"></i>
+                    <div class="small fw-bold">Duration</div>
+                    <div class="small">{{ getDuration(booking) }} days</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex gap-2" *ngIf="booking.status === 'PENDING'">
+                <button class="btn btn-sm btn-success" (click)="updateStatus(booking.id!, 'CONFIRMED')">
+                  <i class="bi bi-check me-1"></i>Approve
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="updateStatus(booking.id!, 'CANCELLED')">
+                  <i class="bi bi-x me-1"></i>Reject
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Bookings -->
+  <div class="text-center py-5" *ngIf="filteredBookings.length === 0">
+    <i class="bi bi-calendar-x text-muted" style="font-size: 4rem;"></i>
+    <h4 class="mt-3">No bookings found</h4>
+    <p class="text-muted">{{ statusFilter === 'ALL' ? 'No bookings available' : 'No ' + statusFilter.toLowerCase() + ' bookings found' }}</p>
+  </div>
+</div>

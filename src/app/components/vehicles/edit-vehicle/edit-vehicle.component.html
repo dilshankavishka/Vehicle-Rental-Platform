@@ -1,0 +1,262 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <i
+              class="bi bi-pencil-square text-primary"
+              style="font-size: 3rem"
+            ></i>
+            <h2 class="mt-3 mb-1">Edit Vehicle</h2>
+            <p class="text-muted">Update your vehicle information</p>
+          </div>
+
+          <!-- Loading -->
+          <div class="text-center py-5" *ngIf="isLoading">
+            <div class="loading-spinner"></div>
+            <p class="mt-2 text-muted">Loading vehicle details...</p>
+          </div>
+
+          <form
+            (ngSubmit)="onSubmit()"
+            #vehicleForm="ngForm"
+            *ngIf="!isLoading && vehicle"
+          >
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Vehicle Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="vehicle.name"
+                  name="name"
+                  required
+                  placeholder="e.g., Tesla Model 3"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Vehicle Type</label>
+                <select
+                  class="form-select"
+                  [(ngModel)]="vehicle.type"
+                  name="type"
+                  required
+                >
+                  <option value="">Select Type</option>
+                  <option value="CAR">Car</option>
+                  <option value="SUV">SUV</option>
+                  <option value="TRUCK">Truck</option>
+                  <option value="MOTORCYCLE">Motorcycle</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Brand</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="vehicle.brand"
+                  name="brand"
+                  required
+                  placeholder="e.g., Tesla"
+                />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Model</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="vehicle.model"
+                  name="model"
+                  required
+                  placeholder="e.g., Model 3"
+                />
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">Year</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [(ngModel)]="vehicle.year"
+                  name="year"
+                  required
+                  [min]="1900"
+                  [max]="currentYear + 1"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Price per Day (LKR)</label>
+                <div class="input-group">
+                  <span class="input-group-text">LKR</span>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="vehicle.pricePerDay"
+                    name="pricePerDay"
+                    required
+                    min="1"
+                    placeholder="8900"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Location</label>
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-geo-alt"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="vehicle.location"
+                    name="location"
+                    required
+                    placeholder="Colombo, Sri Lanka"
+                  />
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Description</label>
+                <textarea
+                  class="form-control"
+                  rows="3"
+                  [(ngModel)]="vehicle.description"
+                  name="description"
+                  required
+                  placeholder="Describe your vehicle, its condition, and any special features..."
+                ></textarea>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Features (comma-separated)</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="featuresString"
+                  name="features"
+                  placeholder="e.g., Electric, Autopilot, Premium Interior, Supercharging"
+                />
+                <div class="form-text">
+                  Separate multiple features with commas
+                </div>
+              </div>
+
+              <!-- Current Images -->
+              <div
+                class="col-12"
+                *ngIf="vehicle.images && vehicle.images.length > 0"
+              >
+                <label class="form-label">Current Images</label>
+                <div class="row g-2">
+                  <div
+                    class="col-auto"
+                    *ngFor="let image of vehicle.images; let i = index"
+                  >
+                    <div class="position-relative">
+                      <img
+                        [src]="image"
+                        class="image-preview border rounded"
+                        alt="Vehicle"
+                      />
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                        style="transform: translate(50%, -50%)"
+                        (click)="removeExistingImage(i)"
+                      >
+                        <i class="bi bi-x"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label">Add New Photos</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  multiple
+                  accept="image/*"
+                  (change)="onFileSelect($event)"
+                />
+                <div class="form-text">
+                  Upload additional photos of your vehicle (JPG, PNG)
+                </div>
+
+                <!-- New Image Previews -->
+                <div class="row g-2 mt-2" *ngIf="newImagePreviews.length > 0">
+                  <div
+                    class="col-auto"
+                    *ngFor="let preview of newImagePreviews; let i = index"
+                  >
+                    <div class="position-relative">
+                      <img
+                        [src]="preview"
+                        class="image-preview border rounded"
+                        alt="Vehicle"
+                      />
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-danger position-absolute top-0 end-0"
+                        style="transform: translate(50%, -50%)"
+                        (click)="removeNewImage(i)"
+                      >
+                        <i class="bi bi-x"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="available"
+                    [(ngModel)]="vehicle.available"
+                    name="available"
+                  />
+                  <label class="form-check-label" for="available">
+                    Vehicle is available for booking
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-danger mt-3" *ngIf="errorMessage">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+
+            <div class="d-grid gap-2 mt-4">
+              <button
+                type="submit"
+                class="btn btn-primary py-2"
+                [disabled]="!vehicleForm.form.valid || isSubmitting"
+              >
+                <span *ngIf="isSubmitting" class="loading-spinner me-2"></span>
+                {{ isSubmitting ? "Updating..." : "Update Vehicle" }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="goBack()"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,138 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Admin Dashboard</h1>
+    <div class="dropdown">
+      <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+        <i class="bi bi-download me-2"></i>Generate Reports
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#" (click)="generateReport('Vehicles')">
+          <i class="bi bi-car-front me-2"></i>Vehicles Report
+        </a></li>
+        <li><a class="dropdown-item" href="#" (click)="generateReport('Bookings')">
+          <i class="bi bi-calendar-check me-2"></i>Bookings Report
+        </a></li>
+        <li><a class="dropdown-item" href="#" (click)="generateReport('Users')">
+          <i class="bi bi-people me-2"></i>Users Report
+        </a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="bi bi-currency-dollar text-primary fs-4"></i>
+          </div>
+          <h3 class="h4 mb-1">${{ totalRevenue | number:'1.0-0' }}</h3>
+          <p class="text-muted mb-0">Total Revenue</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="bi bi-calendar-check text-success fs-4"></i>
+          </div>
+          <h3 class="h4 mb-1">{{ activeBookings }}</h3>
+          <p class="text-muted mb-0">Active Bookings</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="bi bi-car-front text-info fs-4"></i>
+          </div>
+          <h3 class="h4 mb-1">{{ availableVehicles }}</h3>
+          <p class="text-muted mb-0">Available Vehicles</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="bi bi-people text-warning fs-4"></i>
+          </div>
+          <h3 class="h4 mb-1">{{ totalUsers }}</h3>
+          <p class="text-muted mb-0">Total Users</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            <i class="bi bi-graph-up me-2"></i>Transactions
+          </h5>
+          <div class="chart-container">
+            <canvas #transactionChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            <i class="bi bi-bar-chart me-2"></i>Monthly Service Charge Revenue
+          </h5>
+          <div class="chart-container">
+            <canvas #revenueChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title mb-3">
+        <i class="bi bi-clock-history me-2"></i>Recent Bookings
+      </h5>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Vehicle</th>
+              <th>User</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let booking of recentBookings">
+              <td>#{{ booking.id }}</td>
+              <td>{{ getVehicleName(booking.vehicleId) }}</td>
+              <td>{{ getUserName(booking.userId) }}</td>
+              <td>${{ booking.totalAmount }}</td>
+              <td>
+                <span class="badge status-badge" [ngClass]="getStatusBadgeClass(booking.status)">
+                  {{ booking.status }}
+                </span>
+              </td>
+              <td>{{ booking.bookingDate | date:'short' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

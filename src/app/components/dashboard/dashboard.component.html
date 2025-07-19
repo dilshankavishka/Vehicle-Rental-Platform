@@ -1,0 +1,164 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h3 mb-1">Welcome back, {{ currentUser?.name }}!</h1>
+          <p class="text-muted">Here's what's happening with your rentals</p>
+        </div>
+        <div class="text-end">
+          <small class="text-muted">{{ currentDate | date:'fullDate' }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="bi bi-calendar-check text-primary fs-4"></i>
+          </div>
+          <h3 class="h4 mb-1">{{ userBookings.length }}</h3>
+          <p class="text-muted mb-0">Total Bookings</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="bi bi-check-circle text-success fs-4"></i>
+          </div>
+          <h3 class="h4 mb-1">{{ activeBookings }}</h3>
+          <p class="text-muted mb-0">Active Bookings</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="bi bi-car-front text-info fs-4"></i>
+          </div>
+          <h3 class="h4 mb-1">{{ userVehicles.length }}</h3>
+          <p class="text-muted mb-0">My Vehicles</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body text-center">
+          <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="bi bi-currency-dollar text-warning fs-4"></i>
+          </div>
+          <h3 class="h4 mb-1">LKR {{ totalEarnings }}</h3>
+          <p class="text-muted mb-0">Total Earnings</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            <i class="bi bi-lightning-charge text-primary me-2"></i>
+            Quick Actions
+          </h5>
+          <div class="d-grid gap-2">
+            <a routerLink="/vehicles" class="btn btn-outline-primary">
+              <i class="bi bi-search me-2"></i>Browse Vehicles
+            </a>
+            <a routerLink="/vehicles/add" class="btn btn-outline-success">
+              <i class="bi bi-plus-circle me-2"></i>List My Vehicle
+            </a>
+            <a routerLink="/bookings" class="btn btn-outline-info">
+              <i class="bi bi-calendar-check me-2"></i>View My Bookings
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            <i class="bi bi-clock-history text-primary me-2"></i>
+            Recent Activity
+          </h5>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item border-0 px-0" *ngFor="let booking of recentBookings">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-1">Booking #{{ booking.id }}</h6>
+                  <p class="mb-1 text-muted small">{{ booking.vehicle?.name || 'Vehicle' }}</p>
+                  <small class="text-muted">{{ booking.bookingDate | date:'short' }}</small>
+                </div>
+                <span class="badge" [ngClass]="getStatusBadgeClass(booking.status)">
+                  {{ booking.status }}
+                </span>
+              </div>
+            </div>
+            <div class="text-center py-3" *ngIf="recentBookings.length === 0">
+              <p class="text-muted mb-0">No recent activity</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending Bookings for Vehicle Owners -->
+  <div class="row" *ngIf="pendingOwnerBookings.length > 0">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">
+            <i class="bi bi-exclamation-circle text-warning me-2"></i>
+            Pending Approvals for Your Vehicles
+          </h5>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Booking ID</th>
+                  <th>Vehicle</th>
+                  <th>Renter</th>
+                  <th>Dates</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let booking of pendingOwnerBookings">
+                  <td>#{{ booking.id }}</td>
+                  <td>{{ booking.vehicle?.name }}</td>
+                  <td>{{ booking.user?.name }}</td>
+                  <td>{{ booking.startDate | date:'short' }} - {{ booking.endDate | date:'short' }}</td>
+                  <td>LKR {{ booking.totalAmount }}</td>
+                  <td>
+                    <button class="btn btn-sm btn-success me-2" (click)="approveBooking(booking.id!)">
+                      <i class="bi bi-check"></i> Approve
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)="rejectBooking(booking.id!)">
+                      <i class="bi bi-x"></i> Reject
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

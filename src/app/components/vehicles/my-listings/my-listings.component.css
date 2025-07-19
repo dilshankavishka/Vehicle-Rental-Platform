@@ -1,0 +1,95 @@
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-pointer:hover {
+  background-color: rgba(53, 99, 233, 0.1) !important;
+}
+
+.bg-primary {
+  background-color: rgba(53, 99, 233, 1) !important;
+}
+
+.bg-success {
+  background-color: rgba(25, 135, 84, 1) !important;
+}
+
+.bg-info {
+  background-color: rgba(13, 202, 240, 1) !important;
+}
+
+.bg-warning {
+  background-color: rgba(255, 193, 7, 1) !important;
+}
+
+.text-primary {
+  color: rgba(53, 99, 233, 1) !important;
+}
+
+.text-success {
+  color: rgba(25, 135, 84, 1) !important;
+}
+
+.text-info {
+  color: rgba(13, 202, 240, 1) !important;
+}
+
+.text-warning {
+  color: rgba(255, 193, 7, 1) !important;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(53, 99, 233, 0.3);
+  border-radius: 50%;
+  border-top-color: rgba(53, 99, 233, 1);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.border-primary {
+  border-color: rgba(53, 99, 233, 1) !important;
+}
+
+.border-success {
+  border-color: rgba(25, 135, 84, 1) !important;
+}
+
+.border-warning {
+  border-color: rgba(255, 193, 7, 1) !important;
+}
+
+.border-danger {
+  border-color: rgba(220, 53, 69, 1) !important;
+}
+
+.border-secondary {
+  border-color: rgba(108, 117, 125, 1) !important;
+}
+
+.modal-xl {
+  max-width: 1200px;
+}
+
+.table th {
+  border-top: none;
+  font-weight: 600;
+  color: #495057;
+}
+
+.table td {
+  vertical-align: middle;
+}

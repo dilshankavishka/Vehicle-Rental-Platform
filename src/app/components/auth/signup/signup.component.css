@@ -1,0 +1,35 @@
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(53, 99, 233, 0.3);
+  border-radius: 50%;
+  border-top-color: rgba(53, 99, 233, 1);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.text-primary {
+  color: rgba(53, 99, 233, 1) !important;
+}
+
+.btn-primary {
+  background-color: rgba(53, 99, 233, 1);
+  border-color: rgba(53, 99, 233, 1);
+}
+
+.btn-primary:hover {
+  background-color: rgba(42, 79, 186, 1);
+  border-color: rgba(42, 79, 186, 1);
+}
+
+.card {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.invalid-feedback {
+  display: block;
+}

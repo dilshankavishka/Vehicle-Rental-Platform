@@ -1,0 +1,87 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>User Management</h2>
+    <div class="d-flex align-items-center gap-3">
+      <!-- Search Function -->
+      <div class="input-group" style="width: 300px;">
+        <span class="input-group-text">
+          <i class="bi bi-search"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search by name or ID..."
+          [(ngModel)]="searchQuery"
+          (input)="filterUsers()"
+        >
+      </div>
+      <span class="text-muted">{{ filteredUsers.length }} users found</span>
+    </div>
+  </div>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Contact</th>
+              <th>Join Date</th>
+              <th>Bookings</th>
+              <th>Vehicles</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of filteredUsers">
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                    <i class="bi bi-person text-primary"></i>
+                  </div>
+                  <div>
+                    <div class="fw-bold">{{ user.name }}</div>
+                    <small class="text-muted">ID: {{ user.id }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div>{{ user.email }}</div>
+                <small class="text-muted">{{ user.phone }}</small>
+              </td>
+              <td>{{ user.joinDate | date:'mediumDate' }}</td>
+              <td>
+                <span class="badge bg-primary">{{ getUserBookingCount(user.id!) }}</span>
+              </td>
+              <td>
+                <span class="badge bg-success">{{ getUserVehicleCount(user.id!) }}</span>
+              </td>
+              <td>
+                <span class="badge bg-success">Active</span>
+              </td>
+              <td>
+                <button 
+                  class="btn btn-sm btn-danger"
+                  (click)="deleteUser(user.id!)"
+                  [disabled]="user.role === 'ADMIN'"
+                  title="{{ user.role === 'ADMIN' ? 'Cannot delete admin users' : 'Delete user' }}"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- No Users Found -->
+      <div class="text-center py-4" *ngIf="filteredUsers.length === 0">
+        <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
+        <h5 class="mt-3">No users found</h5>
+        <p class="text-muted">{{ searchQuery ? 'Try adjusting your search criteria' : 'No users available' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

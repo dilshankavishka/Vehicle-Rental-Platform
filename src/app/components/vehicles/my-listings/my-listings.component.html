@@ -1,0 +1,365 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>My Vehicle Listings</h2>
+    <div class="d-flex gap-2">
+      <span class="text-muted">{{ myVehicles.length }} active listings</span>
+      <a routerLink="/vehicles/add" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-2"></i>Add New Vehicle
+      </a>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="text-center py-5" *ngIf="isLoading">
+    <div class="loading-spinner"></div>
+    <p class="mt-2 text-muted">Loading your listings...</p>
+  </div>
+
+  <!-- Vehicle Listings -->
+  <div class="row g-4" *ngIf="!isLoading">
+    <div class="col-12" *ngFor="let vehicle of myVehicles">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <img [src]="vehicle.images[0]" [alt]="vehicle.name" class="img-fluid rounded">
+            </div>
+            <div class="col-md-9">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                  <h5 class="mb-1">{{ vehicle.name }}</h5>
+                  <p class="text-muted mb-0">
+                    <i class="bi bi-geo-alt me-1"></i>{{ vehicle.location }}
+                  </p>
+                  <small class="text-muted">Listed on {{ vehicle.createdDate | date:'mediumDate' }}</small>
+                </div>
+                <div class="text-end">
+                  <span class="badge" [ngClass]="vehicle.available ? 'bg-success' : 'bg-danger'">
+                    {{ vehicle.available ? 'Active' : 'Inactive' }}
+                  </span>
+                  <div class="mt-1">
+                    <small class="text-muted">ID: {{ vehicle.id }}</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vehicle Stats -->
+              <div class="row g-3 mb-3">
+                <div class="col-md-2">
+                  <div class="text-center p-2 bg-light rounded">
+                    <i class="bi bi-currency-dollar text-primary"></i>
+                    <div class="small fw-bold">Price/Day</div>
+                    <div class="small">LKR {{ vehicle.pricePerDay }}</div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="text-center p-2 bg-light rounded cursor-pointer" (click)="viewReviews(vehicle.id!)">
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <div class="small fw-bold">Rating</div>
+                    <div class="small">{{ vehicle.rating }} ({{ vehicle.reviewCount }})</div>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="text-center p-2 bg-light rounded">
+                    <i class="bi bi-calendar-check text-success"></i>
+                    <div class="small fw-bold">Active Bookings</div>
+                    <div class="small">{{ getActiveBookings(vehicle.id!).length }}</div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="text-center p-2 bg-light rounded">
+                    <i class="bi bi-clock text-warning"></i>
+                    <div class="small fw-bold">Pending Requests</div>
+                    <div class="small">{{ getPendingBookings(vehicle.id!).length }}</div>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="text-center p-2 bg-light rounded cursor-pointer" (click)="viewEarnings(vehicle.id!)">
+                    <i class="bi bi-cash text-info"></i>
+                    <div class="small fw-bold">Total Earnings</div>
+                    <div class="small">LKR {{ getTotalEarnings(vehicle.id!) }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Booking Calendar -->
+              <div class="mb-3" *ngIf="getVehicleBookings(vehicle.id!).length > 0">
+                <h6 class="text-info">
+                  <i class="bi bi-calendar-week me-1"></i>
+                  Booking Schedule
+                </h6>
+                <div class="row g-2">
+                  <div class="col-md-4" *ngFor="let booking of getVehicleBookings(vehicle.id!).slice(0, 3)">
+                    <div class="card" [ngClass]="getBookingCardClass(booking.status)">
+                      <div class="card-body p-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div>
+                            <small class="fw-bold">{{ booking.startDate | date:'MMM dd' }} - {{ booking.endDate | date:'MMM dd' }}</small>
+                            <div class="small text-muted">{{ booking.user?.name || 'User ' + booking.userId }}</div>
+                            <div class="small fw-bold">LKR {{ booking.totalAmount }}</div>
+                          </div>
+                          <span class="badge" [ngClass]="getStatusBadgeClass(booking.status)">
+                            {{ booking.status }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12" *ngIf="getVehicleBookings(vehicle.id!).length > 3">
+                    <button class="btn btn-sm btn-outline-info" (click)="viewAllBookings(vehicle.id!)">
+                      View All {{ getVehicleBookings(vehicle.id!).length }} Bookings
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Pending Booking Requests -->
+              <div class="mb-3" *ngIf="getPendingBookings(vehicle.id!).length > 0">
+                <h6 class="text-warning">
+                  <i class="bi bi-exclamation-triangle me-1"></i>
+                  Pending Booking Requests ({{ getPendingBookings(vehicle.id!).length }})
+                </h6>
+                <div class="row g-2">
+                  <div class="col-md-6" *ngFor="let booking of getPendingBookings(vehicle.id!)">
+                    <div class="card bg-light">
+                      <div class="card-body p-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <div>
+                            <small class="fw-bold">Booking #{{ booking.id }}</small>
+                            <div class="small text-muted">
+                              {{ booking.startDate | date:'short' }} - {{ booking.endDate | date:'short' }}
+                            </div>
+                            <div class="small text-success fw-bold">LKR {{ booking.totalAmount }}</div>
+                          </div>
+                          <div class="d-flex gap-1">
+                            <button 
+                              class="btn btn-sm btn-success"
+                              (click)="approveBooking(booking.id!)"
+                            >
+                              <i class="bi bi-check"></i>
+                            </button>
+                            <button 
+                              class="btn btn-sm btn-danger"
+                              (click)="rejectBooking(booking.id!)"
+                            >
+                              <i class="bi bi-x"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vehicle Actions -->
+              <div class="d-flex gap-2">
+                <button 
+                  class="btn btn-sm"
+                  [ngClass]="vehicle.available ? 'btn-warning' : 'btn-success'"
+                  (click)="toggleVehicleAvailability(vehicle)"
+                >
+                  <i class="bi" [ngClass]="vehicle.available ? 'bi-pause' : 'bi-play'"></i>
+                  {{ vehicle.available ? 'Deactivate' : 'Activate' }}
+                </button>
+                
+                <button 
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="editVehicle(vehicle.id!)"
+                  title="Edit vehicle details"
+                >
+                  <i class="bi bi-pencil me-1"></i>Edit
+                </button>
+                
+                <button 
+                  class="btn btn-sm btn-outline-info"
+                  (click)="viewAllBookings(vehicle.id!)"
+                  title="View all bookings"
+                >
+                  <i class="bi bi-calendar-check me-1"></i>Bookings
+                </button>
+                
+                <button 
+                  class="btn btn-sm btn-outline-success"
+                  (click)="downloadEarningsReport(vehicle.id!)"
+                  title="Download earnings report"
+                >
+                  <i class="bi bi-download me-1"></i>Report
+                </button>
+                
+                <button 
+                  class="btn btn-sm btn-danger"
+                  (click)="deleteVehicle(vehicle.id!)"
+                >
+                  <i class="bi bi-trash me-1"></i>Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Listings -->
+  <div class="text-center py-5" *ngIf="!isLoading && myVehicles.length === 0">
+    <i class="bi bi-car-front text-muted" style="font-size: 4rem;"></i>
+    <h4 class="mt-3">No vehicle listings yet</h4>
+    <p class="text-muted mb-4">Start earning by listing your vehicle</p>
+    <a routerLink="/vehicles/add" class="btn btn-primary">
+      <i class="bi bi-plus-circle me-2"></i>List Your First Vehicle
+    </a>
+  </div>
+</div>
+
+<!-- Reviews Modal -->
+<div class="modal fade" id="reviewsModal" tabindex="-1" *ngIf="selectedVehicleReviews.length > 0">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-star me-2"></i>Reviews for {{ selectedVehicleName }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-12" *ngFor="let review of selectedVehicleReviews">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <h6 class="mb-0">{{ review.userName }}</h6>
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-star-fill text-warning me-1" *ngFor="let star of [1,2,3,4,5]; let i = index" 
+                       [class.text-muted]="i >= review.rating"></i>
+                    <span class="ms-1">{{ review.rating }}/5</span>
+                  </div>
+                </div>
+                <p class="text-muted mb-2">{{ review.comment }}</p>
+                <small class="text-muted">{{ review.date | date:'mediumDate' }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bookings Modal -->
+<div class="modal fade" id="bookingsModal" tabindex="-1" *ngIf="selectedVehicleBookings.length > 0">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-calendar-check me-2"></i>All Bookings for {{ selectedVehicleName }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Renter</th>
+                <th>Dates</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Booked On</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let booking of selectedVehicleBookings">
+                <td>#{{ booking.id }}</td>
+                <td>{{ booking.user?.name || 'User ' + booking.userId }}</td>
+                <td>{{ booking.startDate | date:'short' }} - {{ booking.endDate | date:'short' }}</td>
+                <td>LKR {{ booking.totalAmount }}</td>
+                <td>
+                  <span class="badge" [ngClass]="getStatusBadgeClass(booking.status)">
+                    {{ booking.status }}
+                  </span>
+                </td>
+                <td>{{ booking.bookingDate | date:'short' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Earnings Modal -->
+<div class="modal fade" id="earningsModal" tabindex="-1" *ngIf="selectedVehicleEarnings.length > 0">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-cash me-2"></i>Earnings for {{ selectedVehicleName }}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-4">
+          <div class="col-md-4">
+            <div class="card bg-success text-white">
+              <div class="card-body text-center">
+                <h4>LKR {{ getTotalEarningsForVehicle(selectedVehicleId) }}</h4>
+                <p class="mb-0">Total Earnings</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card bg-info text-white">
+              <div class="card-body text-center">
+                <h4>{{ selectedVehicleEarnings.length }}</h4>
+                <p class="mb-0">Completed Bookings</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card bg-warning text-white">
+              <div class="card-body text-center">
+                <h4>LKR {{ getAverageBookingValue(selectedVehicleId) }}</h4>
+                <p class="mb-0">Average Booking</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Renter</th>
+                <th>Dates</th>
+                <th>Base Amount</th>
+                <th>Service Charge (5%)</th>
+                <th>Your Earnings</th>
+                <th>Completed On</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let booking of selectedVehicleEarnings">
+                <td>#{{ booking.id }}</td>
+                <td>{{ booking.user?.name || 'User ' + booking.userId }}</td>
+                <td>{{ booking.startDate | date:'short' }} - {{ booking.endDate | date:'short' }}</td>
+                <td>LKR {{ getBaseAmount(booking.totalAmount) }}</td>
+                <td>LKR {{ getServiceCharge(booking.totalAmount) }}</td>
+                <td>LKR {{ getOwnerEarnings(booking.totalAmount) }}</td>
+                <td>{{ booking.bookingDate | date:'short' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="downloadEarningsReport(selectedVehicleId)">
+          <i class="bi bi-download me-2"></i>Download Report
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,346 @@
+<div class="container mt-4" *ngIf="!isLoading && vehicle">
+  <div class="row">
+    <!-- Vehicle Images -->
+    <div class="col-md-6">
+      <div class="position-relative">
+        <img
+          [src]="
+            'http://localhost:8080/uploads/' + vehicle.images[currentImageIndex]
+          "
+          [alt]="vehicle.name"
+          class="img-fluid rounded shadow-sm w-100"
+          style="height: 400px; object-fit: cover"
+        />
+
+        <!-- Image Navigation -->
+        <div
+          class="position-absolute top-50 start-0 translate-middle-y"
+          *ngIf="vehicle.images.length > 1"
+        >
+          <button
+            class="btn btn-dark btn-sm rounded-circle"
+            (click)="prevImage()"
+          >
+            <i class="bi bi-chevron-left"></i>
+          </button>
+        </div>
+        <div
+          class="position-absolute top-50 end-0 translate-middle-y"
+          *ngIf="vehicle.images.length > 1"
+        >
+          <button
+            class="btn btn-dark btn-sm rounded-circle"
+            (click)="nextImage()"
+          >
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+
+        <!-- Image Indicators -->
+        <div
+          class="position-absolute bottom-0 start-50 translate-middle-x mb-3"
+          *ngIf="vehicle.images.length > 1"
+        >
+          <div class="d-flex gap-2">
+            <button
+              *ngFor="let image of vehicle.images; let i = index"
+              class="btn btn-sm rounded-circle"
+              [class.btn-light]="i === currentImageIndex"
+              [class.btn-secondary]="i !== currentImageIndex"
+              (click)="currentImageIndex = i"
+              style="width: 12px; height: 12px; padding: 0"
+            ></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thumbnail Images -->
+      <div class="row g-2 mt-3" *ngIf="vehicle.images.length > 1">
+        <div class="col-3" *ngFor="let image of vehicle.images; let i = index">
+          <img
+            [src]="'http://localhost:8080/uploads/' + image"
+            [alt]="vehicle.name"
+            class="img-fluid rounded cursor-pointer"
+            [class.border-primary]="i === currentImageIndex"
+            [class.border-3]="i === currentImageIndex"
+            style="height: 80px; object-fit: cover; cursor: pointer"
+            (click)="currentImageIndex = i"
+            (keydown)="
+              ($event.key === 'Enter' || $event.key === ' ') &&
+                (currentImageIndex = i)
+            "
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehicle Details -->
+    <div class="col-md-6">
+      <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+          <h1 class="h3 mb-1">{{ vehicle.name }}</h1>
+          <p class="text-muted mb-0">
+            <i class="bi bi-geo-alt me-1"></i>{{ vehicle.location }}
+          </p>
+        </div>
+        <span
+          class="badge"
+          [ngClass]="vehicle.available ? 'bg-success' : 'bg-danger'"
+        >
+          {{ vehicle.available ? "Available" : "Unavailable" }}
+        </span>
+      </div>
+
+      <!-- Rating and Owner -->
+      <div class="d-flex align-items-center mb-3">
+        <div class="d-flex align-items-center me-4">
+          <i class="bi bi-star-fill text-warning me-1"></i>
+          <span class="fw-bold">{{ vehicle.rating }}</span>
+          <span class="text-muted ms-1"
+            >({{ vehicle.reviewCount }} reviews)</span
+          >
+        </div>
+        <div class="text-muted">
+          <i class="bi bi-person me-1"></i>Listed by {{ vehicle.ownerName }}
+        </div>
+      </div>
+
+      <!-- Vehicle Info -->
+      <div class="row g-3 mb-4">
+        <div class="col-6">
+          <div class="card bg-light">
+            <div class="card-body text-center p-3">
+              <i class="bi bi-car-front text-primary fs-4"></i>
+              <div class="small fw-bold mt-1">Type</div>
+              <div class="small">{{ vehicle.type }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="card bg-light">
+            <div class="card-body text-center p-3">
+              <i class="bi bi-calendar text-info fs-4"></i>
+              <div class="small fw-bold mt-1">Year</div>
+              <div class="small">{{ vehicle.year }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="card bg-light">
+            <div class="card-body text-center p-3">
+              <i class="bi bi-tag text-success fs-4"></i>
+              <div class="small fw-bold mt-1">Brand</div>
+              <div class="small">{{ vehicle.brand }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="card bg-light">
+            <div class="card-body text-center p-3">
+              <i class="bi bi-gear text-warning fs-4"></i>
+              <div class="small fw-bold mt-1">Model</div>
+              <div class="small">{{ vehicle.model }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price -->
+      <div class="card border-primary mb-4">
+        <div class="card-body text-center">
+          <h2 class="text-primary mb-0">
+            LKR {{ vehicle.pricePerDay | number : "1.0-0" }}
+          </h2>
+          <small class="text-muted">per day</small>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="mb-4">
+        <h6 class="fw-bold mb-2">Features</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <span
+            class="badge bg-light text-dark"
+            *ngFor="let feature of vehicle.features"
+          >
+            {{ feature }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-4">
+        <h6 class="fw-bold mb-2">Description</h6>
+        <p class="text-muted">{{ vehicle.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Section -->
+  <div class="row mt-5" *ngIf="vehicle.available">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-4">
+            <i class="bi bi-calendar-check me-2"></i>Book This Vehicle
+          </h5>
+
+          <form (ngSubmit)="onBookingSubmit()" #bookingForm="ngForm">
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label class="form-label">Start Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="bookingData.startDate"
+                  name="startDate"
+                  required
+                  [min]="minDate"
+                  (change)="calculatePricing()"
+                />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">End Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="bookingData.endDate"
+                  name="endDate"
+                  required
+                  [min]="bookingData.startDate || minDate"
+                  (change)="calculatePricing()"
+                />
+              </div>
+            </div>
+
+            <!-- Pricing Breakdown -->
+            <div
+              class="card bg-light mb-4"
+              *ngIf="bookingData.startDate && bookingData.endDate"
+            >
+              <div class="card-body">
+                <h6 class="card-title">Booking Summary</h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="d-flex justify-content-between mb-2">
+                      <span>Duration:</span>
+                      <span>{{ getDays() }} days</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                      <span>Daily Rate:</span>
+                      <span
+                        >LKR {{ vehicle.pricePerDay | number : "1.0-0" }}</span
+                      >
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                      <span>Subtotal:</span>
+                      <span>LKR {{ baseAmount | number : "1.0-0" }}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="d-flex justify-content-between mb-2">
+                      <span>Service Charge (5%):</span>
+                      <span>LKR {{ serviceCharge | number : "1.0-0" }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                      <span>VAT (18%):</span>
+                      <span>LKR {{ vat | number : "1.0-0" }}</span>
+                    </div>
+                    <hr />
+                    <div
+                      class="d-flex justify-content-between fw-bold text-primary"
+                    >
+                      <span>Total Amount:</span>
+                      <span>LKR {{ totalAmount | number : "1.0-0" }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-check mb-4">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="termsAccepted"
+                [(ngModel)]="bookingData.termsAccepted"
+                name="termsAccepted"
+                required
+              />
+              <label class="form-check-label" for="termsAccepted">
+                I accept the
+                <a href="#" class="text-primary">terms and conditions</a>
+              </label>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="goBack()"
+              >
+                <i class="bi bi-arrow-left me-2"></i>Back to Vehicles
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!bookingForm.form.valid || isBooking"
+              >
+                <span *ngIf="isBooking" class="loading-spinner me-2"></span>
+                {{
+                  isBooking
+                    ? "Processing..."
+                    : "Book for LKR " + (totalAmount | number : "1.0-0")
+                }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews Section -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-4">
+            <i class="bi bi-star me-2"></i>Reviews ({{ reviews.length }})
+          </h5>
+
+          <div class="row g-4">
+            <div class="col-md-6" *ngFor="let review of reviews">
+              <div class="card bg-light">
+                <div class="card-body">
+                  <div
+                    class="d-flex justify-content-between align-items-start mb-2"
+                  >
+                    <h6 class="mb-0">{{ review.userName }}</h6>
+                    <div class="d-flex align-items-center">
+                      <i
+                        class="bi bi-star-fill text-warning me-1"
+                        *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
+                        [class.text-muted]="i >= review.rating"
+                      ></i>
+                    </div>
+                  </div>
+                  <p class="text-muted small mb-2">{{ review.comment }}</p>
+                  <small class="text-muted">{{
+                    review.date | date : "mediumDate"
+                  }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="text-center py-5" *ngIf="isLoading">
+  <div class="loading-spinner"></div>
+  <p class="mt-2 text-muted">Loading vehicle details...</p>
+</div>

@@ -1,0 +1,27 @@
+.navbar-brand {
+  color: rgba(53, 99, 233, 1) !important;
+  font-weight: 700;
+}
+
+.nav-link {
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: rgba(53, 99, 233, 1) !important;
+}
+
+.nav-link.active {
+  color: rgba(53, 99, 233, 1) !important;
+  font-weight: 600;
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item:hover {
+  background-color: rgba(53, 99, 233, 0.1);
+  color: rgba(53, 99, 233, 1);
+}

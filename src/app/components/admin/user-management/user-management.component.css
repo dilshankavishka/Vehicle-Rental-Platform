@@ -1,0 +1,35 @@
+.table th {
+  border-top: none;
+  font-weight: 600;
+  color: #495057;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.form-control:focus {
+  border-color: rgba(53, 99, 233, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(53, 99, 233, 0.25);
+}
+
+.text-primary {
+  color: rgba(53, 99, 233, 1) !important;
+}
+
+.bg-primary {
+  background-color: rgba(53, 99, 233, 1) !important;
+}

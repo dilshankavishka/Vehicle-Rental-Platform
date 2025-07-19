@@ -1,0 +1,134 @@
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="row w-100">
+    <div class="col-md-6 col-lg-4 mx-auto">
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <i class="bi bi-car-front-fill text-primary" style="font-size: 3rem;"></i>
+            <h2 class="mt-3 mb-1">Create Account</h2>
+            <p class="text-muted">Join EasyVehicleRental today</p>
+          </div>
+
+          <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+            <div class="mb-3">
+              <label for="name" class="form-label">Full Name</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-person"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  name="name"
+                  [(ngModel)]="userData.name"
+                  required
+                  minlength="2"
+                  placeholder="Enter your full name"
+                >
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-envelope"></i>
+                </span>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  [(ngModel)]="userData.email"
+                  required
+                  email
+                  placeholder="Enter your email"
+                >
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone Number</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-telephone"></i>
+                </span>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="phone"
+                  name="phone"
+                  [(ngModel)]="userData.phone"
+                  required
+                  placeholder="Enter your phone number"
+                >
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-lock"></i>
+                </span>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  [(ngModel)]="userData.password"
+                  required
+                  minlength="6"
+                  placeholder="Create a password"
+                >
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="confirmPassword" class="form-label">Confirm Password</label>
+              <div class="input-group">
+                <span class="input-group-text">
+                  <i class="bi bi-lock-fill"></i>
+                </span>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  [(ngModel)]="confirmPassword"
+                  required
+                  placeholder="Confirm your password"
+                  [class.is-invalid]="confirmPassword && userData.password !== confirmPassword"
+                >
+              </div>
+              <div class="invalid-feedback" *ngIf="confirmPassword && userData.password !== confirmPassword">
+                Passwords do not match
+              </div>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="errorMessage">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100 py-2 mb-3"
+              [disabled]="!signupForm.form.valid || userData.password !== confirmPassword || isLoading"
+            >
+              <span *ngIf="isLoading" class="loading-spinner me-2"></span>
+              {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+            </button>
+          </form>
+
+          <div class="text-center">
+            <p class="mb-0">Already have an account? 
+              <a routerLink="/login" class="text-primary text-decoration-none">Sign in here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
